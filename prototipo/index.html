@@ -408,14 +408,16 @@ const FX=(()=>{
  // poste de barbero girando
  // botones: rebote al tocar
  document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn,.opt,.slot,.day,.chip,.mini');if(b)animate(b,{scale:[1,.96,1],duration:260,ease:'out(3)'})});
- // aparecer secciones al hacer scroll
- const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;io.unobserve(en.target);
-  animate(en.target.querySelectorAll('h2,.price,.card,p'),{opacity:[0,1],y:[24,0],delay:stagger(70),duration:600,ease:'out(3)'})}),{threshold:.15});
- document.querySelectorAll('#home .sec').forEach(s=>{s.querySelectorAll('h2,.price,.card,p').forEach(e=>e.style.opacity=0);io.observe(s)});
- function home(){createTimeline({defaults:{ease:'out(4)',duration:700}})
+ // entrada del inicio: una sola cascada de arriba hacia abajo, sin depender del scroll
+ const HOME=['#home .ln','#home .hero > p','#home .banner','#home .sec','#home .foot','#home .sticky-cta','#waFloat'];
+ function home(){
+  A.utils.set(HOME.join(','),{opacity:0});
+  createTimeline({defaults:{ease:'out(4)',duration:700}})
   .add('#home .ln',{opacity:[0,1],y:['110%','0%'],rotate:[-4,0],delay:stagger(120)})
-  .add('#home .hero p, #home .hero .btn',{opacity:[0,1],y:[16,0],delay:stagger(90)},'-=450')
-  .add('#home .sticky-cta, #waFloat',{opacity:[0,1],y:[40,0],delay:stagger(120)},'-=400')}
+  .add('#home .hero > p',{opacity:[0,1],y:[16,0]},'-=450')
+  .add('#home .banner',{opacity:[0,1],y:[16,0]},'-=550')
+  .add('#home .sec, #home .foot',{opacity:[0,1],y:[24,0],delay:stagger(90)},'-=500')
+  .add('#home .sticky-cta, #waFloat',{opacity:[0,1],y:[40,0],delay:stagger(100)},'<<+=150')}
  function done(){
   createTimeline({defaults:{ease:'out(3)'}})
   .add('#gate .gate-ic',{scale:[{from:0,to:1.15,duration:420},{to:1,duration:260}],duration:680})
