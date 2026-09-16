@@ -24,8 +24,8 @@ Reserva rápida: la web no vende, ordena. Mobile-first (375px).
 
 ## Tipografía
 - Titulares: **Bebas Neue** (mayúsculas, tracking 0.02em)
-- Texto y UI: **Inter** 400/500/600/700, base 16px, line-height 1.5
-- Números de precio/hora: Inter 700 tabular-nums
+- Texto y UI: **Barlow** 400/500/600/700, base 16px, line-height 1.5
+- Números de precio/hora: Barlow 700 tabular-nums
 
 ## Reglas
 - Íconos SVG (Lucide), nunca emoji.
