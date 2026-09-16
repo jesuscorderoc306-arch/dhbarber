@@ -154,6 +154,13 @@ body[data-v=book] .wa-float,body[data-v=panel] .wa-float{display:none}
 .ticket .tr span:last-child{text-align:right;font-weight:700}
 .ticket .tot{font-size:17px;font-weight:700}
 .ticket .bars{height:34px;margin:12px 6px 4px;background:repeating-linear-gradient(90deg,#16161a 0 2px,transparent 2px 4px,#16161a 4px 5px,transparent 5px 8px,#16161a 8px 11px,transparent 11px 12px)}
+/* paso obligatorio WhatsApp */
+.gate-ic{width:84px;height:84px;border-radius:50%;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);display:grid;place-items:center;margin:32px auto 14px}
+.gate-step{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--warn);background:rgba(242,184,75,.12);padding:4px 10px;border-radius:99px;margin-bottom:12px}
+.gate-txt{color:var(--muted);margin:12px auto 22px;max-width:34ch}.gate-txt b{color:var(--text)}
+.btn-big{min-height:64px;font-size:18px;border-radius:14px;box-shadow:0 10px 30px rgba(37,211,102,.25)}
+.gate-warn{display:flex;gap:8px;align-items:flex-start;justify-content:center;text-align:left;font-size:13px;color:var(--warn);margin:14px auto 0;max-width:36ch}
+.gate-warn .ico{width:16px;height:16px;margin-top:2px}
 </style>
 </head>
 <body class="intro-on" data-v="home">
@@ -218,18 +225,29 @@ body[data-v=book] .wa-float,body[data-v=panel] .wa-float{display:none}
 <section id="done" class="view">
  <header class="top"><div class="wrap"><div class="logo"><div class="pole"></div><b>DH</b><span>Barber<br>Studio</span></div></div></header>
  <div class="wrap" style="text-align:center;padding-bottom:40px">
-  <div class="ok-ic"><svg class="ico"><use href="#i-check"/></svg></div>
-  <h1 class="h" style="font-size:48px">¡Cita apartada!</h1>
-  <p class="muted" id="doneName" style="margin:6px 0 20px"></p>
-  <div class="printer" aria-label="Ticket de tu cita">
-   <div class="printer-slot"><i class="printer-led"></i></div>
-   <div class="ticket-clip"><div class="ticket" id="ticket"></div></div>
+  <!-- paso obligatorio: WhatsApp -->
+  <div id="gate">
+   <div class="gate-ic"><svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="#fff" d="M12 1.6a10.4 10.4 0 0 0-9 15.6L1.6 22.4l5.3-1.4A10.4 10.4 0 1 0 12 1.6z"/><circle cx="12" cy="12" r="8.3" fill="#25D366"/><path fill="#fff" d="M8.4 6.9c.3-.3.8-.3 1.1.1l1.2 2.1c.2.3.1.8-.2 1.1l-.6.6a6.3 6.3 0 0 0 3.2 3.2l.6-.6c.3-.3.8-.4 1.1-.2l2.1 1.2c.4.2.4.8.1 1.1l-.9.9c-.7.7-1.7.9-2.6.5a10.6 10.6 0 0 1-5.4-5.4c-.4-.9-.2-1.9.5-2.6z"/></svg></div>
+   <p class="gate-step">Último paso · obligatorio</p>
+   <h1 class="h" style="font-size:48px">Mándanos<br><span class="gold">el WhatsApp</span></h1>
+   <p class="gate-txt"><b>Tu cita todavía no está confirmada.</b> Toca el botón, se abre WhatsApp con el mensaje ya escrito y solo presiona <b>Enviar</b>.</p>
+   <a class="btn btn-wa btn-big" id="waLink" target="_blank" rel="noopener" onclick="waSent()"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-9 15.6L1.6 22.4l5.3-1.4A10.4 10.4 0 1 0 12 1.6zm0 2a8.4 8.4 0 1 1-4.3 15.6l-.3-.2-3 .8.8-2.9-.2-.3A8.4 8.4 0 0 1 12 3.6zM8.4 6.9c-.7.7-.9 1.7-.5 2.6a10.6 10.6 0 0 0 5.4 5.4c.9.4 1.9.2 2.6-.5l.9-.9c.3-.3.3-.9-.1-1.1l-2.1-1.2c-.3-.2-.8-.1-1.1.2l-.6.6a6.3 6.3 0 0 1-3.2-3.2l.6-.6c.3-.3.4-.8.2-1.1L9.5 7c-.3-.4-.8-.4-1.1-.1z"/></svg>Enviar mi cita por WhatsApp</a>
+   <p class="gate-warn"><svg class="ico"><use href="#i-clock"/></svg>Sin este mensaje la barbería no confirma tu cita y puede cancelarse.</p>
   </div>
-  <div style="height:8px"></div>
-  <a class="btn btn-wa" id="waLink" target="_blank"><svg class="ico"><use href="#i-wa"/></svg>Avisar por WhatsApp</a>
-  <p class="help">Recomendado: así la barbería confirma tu cita más rápido.</p>
-  <button class="btn btn-line" style="margin-top:12px"><svg class="ico"><use href="#i-cal"/></svg>Agregar a mi calendario</button>
-  <button class="back" style="margin:14px auto" onclick="show('home')">Volver al inicio</button>
+  <!-- ya enviado: ticket -->
+  <div id="doneOk" hidden>
+   <div class="ok-ic"><svg class="ico"><use href="#i-check"/></svg></div>
+   <h1 class="h" style="font-size:48px">¡Cita apartada!</h1>
+   <p class="muted" id="doneName" style="margin:6px 0 20px"></p>
+   <div class="printer" aria-label="Ticket de tu cita">
+    <div class="printer-slot"><i class="printer-led"></i></div>
+    <div class="ticket-clip"><div class="ticket" id="ticket"></div></div>
+   </div>
+   <div style="height:8px"></div>
+   <p class="help" style="margin-bottom:10px">¿No se envió? <a class="link" id="waRetry" target="_blank" rel="noopener">Abrir WhatsApp otra vez</a></p>
+   <button class="btn btn-line"><svg class="ico"><use href="#i-cal"/></svg>Agregar a mi calendario</button>
+   <button class="back" style="margin:14px auto" onclick="show('home')">Volver al inicio</button>
+  </div>
  </div>
 </section>
 
@@ -342,7 +360,8 @@ function ticketHTML(){const b=BR.find(x=>x.id===S.br),s=SV.find(x=>x.id===S.sv),
 function finish(){const b=BR.find(x=>x.id===S.br),s=SV.find(x=>x.id===S.sv),d=new Date(S.day);
  $('doneName').textContent=`${S.name.trim()}, te esperamos.`;$('ticket').innerHTML=ticketHTML();if(!window.anime)document.body.classList.add('no-anime');
  const msg=`Hola, agendé ${s.n} con ${S.ba==='any'?'el primer barbero disponible':S.ba} el ${d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric'})} a las ${fmt(S.time)} en ${b.n}. A nombre de ${S.name.trim()}.`;
- $('waLink').href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;show('done')}
+ $('waLink').href=$('waRetry').href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;$('gate').hidden=false;$('doneOk').hidden=true;show('done')}
+function waSent(){setTimeout(()=>{$('gate').hidden=true;$('doneOk').hidden=false;scrollTo(0,0);FX.printed()},600)}
 
 /* ---- panel ---- */
 let P={br:'all',ba:'all'};
@@ -383,7 +402,7 @@ function blockHour(){const h=prompt('¿Qué hora bloquear? (ej. 16:00)');if(!h)r
 /* ---- animaciones (Anime.js v4) ---- */
 const FX=(()=>{
  const A=window.anime,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
- if(!A||RM)return{view(){},step(){},panel(){}};
+ if(!A||RM)return{view(){},step(){},panel(){},printed(){}};
  const {animate,stagger,createTimeline}=A;
  let lastStep=-1,lastDay=null,lastStats={};
  // poste de barbero girando
@@ -397,21 +416,30 @@ const FX=(()=>{
   .add('#home .ln',{opacity:[0,1],y:['110%','0%'],rotate:[-4,0],delay:stagger(120)})
   .add('#home .hero p, #home .hero .btn',{opacity:[0,1],y:[16,0],delay:stagger(90)},'-=450')
   .add('#home .sticky-cta, #waFloat',{opacity:[0,1],y:[40,0],delay:stagger(120)},'-=400')}
- function done(){const c=document.querySelector('#done .ok-ic');
+ function done(){
   createTimeline({defaults:{ease:'out(3)'}})
-  .add(c,{scale:[0,1.15,1],rotate:[-90,0],duration:700,ease:'outElastic(1,.6)'})
-  .add('#done h1',{opacity:[0,1],scale:[.8,1],duration:450},'-=350')
-  .add('#done #doneName, #done .printer-slot',{opacity:[0,1],y:[14,0],delay:stagger(80),duration:420},'-=250')
-  .add('#done .printer-led',{opacity:{from:.2,to:1},duration:220,loop:4,alternate:true,ease:'linear'},'-=100')
+  .add('#gate .gate-ic',{scale:[{from:0,to:1.15,duration:420},{to:1,duration:260}],duration:680})
+  .add('#gate .gate-step, #gate h1, #gate .gate-txt',{opacity:[0,1],y:[16,0],delay:stagger(90),duration:450},'-=250')
+  .add('#waLink',{opacity:[0,1],scale:[.9,1],duration:450,ease:'outBack(2)'},'-=150')
+  .add('#gate .gate-warn',{opacity:[0,1],duration:400},'-=200');
+  // el botón late hasta que lo toquen
+  animate('#waLink',{scale:{from:1,to:1.04},duration:700,delay:1600,loop:true,alternate:true,ease:'inOut(2)'})}
+ function printed(){const c=document.querySelector('#doneOk .ok-ic');
+  A.utils.remove('#waLink');
+  createTimeline({defaults:{ease:'out(3)'}})
+  .add(c,{scale:[{from:0,to:1.15,duration:450},{to:1,duration:250}],rotate:{from:-90,to:0,duration:700}})
+  .add('#doneOk h1',{opacity:[0,1],scale:[.8,1],duration:450},'-=350')
+  .add('#doneName, #doneOk .printer-slot',{opacity:[0,1],y:[14,0],delay:stagger(80),duration:420},'-=250')
+  .add('#doneOk .printer-led',{opacity:{from:.2,to:1},duration:220,loop:4,alternate:true,ease:'linear'},'-=100')
   // impresión: avanza a tirones como una impresora térmica
   .add('#ticket',{translateY:[{from:'-100%',to:'-64%',duration:650,ease:'linear'},{to:'-60%',duration:250,ease:'linear'},{to:'-30%',duration:650,ease:'linear'},{to:'-26%',duration:250,ease:'linear'},{to:'0%',duration:600,ease:'out(2)'}]},'<<')
   .add('#ticket',{rotate:[{from:0,to:-1.2,duration:180},{to:.6,duration:180},{to:0,duration:240}]})
-  .add('#done .btn, #done .help, #done .back',{opacity:[0,1],y:[14,0],delay:stagger(60),duration:420},'-=300')
-  .add('#done .btn-wa',{scale:[1,1.04,1],duration:900,ease:'inOut(2)',loop:2},'+=100')}
+  .add('#doneOk .help, #doneOk .btn, #doneOk .back',{opacity:[0,1],y:[14,0],delay:stagger(60),duration:420},'-=300')}
  return{
   view(v){lastStep=-1;lastStats={};
    if(v==='home')home();
    if(v==='done')done();
+   if(v==='printed')printed();
    if(v==='book')animate('#book .top',{opacity:[0,1],duration:300});
    if(v==='panel')animate('#panel .top, #panel .pn-bar, #panel .stat .card, #panel aside',{opacity:[0,1],y:[18,0],delay:stagger(60),duration:550,ease:'out(3)'})},
   step(){
@@ -434,6 +462,7 @@ const FX=(()=>{
    // CTA se ilumina al habilitarse
    const nb=$('nextBtn');if(!nb.disabled&&nb.dataset.was==='off')animate(nb,{scale:[.95,1],duration:400,ease:'outElastic(1,.5)'});
    nb.dataset.was=nb.disabled?'off':'on'},
+  printed,
   panel(){
    ['sTotal','sPend','sMoney'].forEach(id=>{const el=$(id),money=el.textContent.startsWith('$'),to=+el.textContent.replace(/\D/g,''),from=lastStats[id]??0;
     if(from===to)return;const o={v:from};lastStats[id]=to;
