@@ -95,7 +95,7 @@ input:focus{border-color:var(--gold);outline:0}
 .mini.wa{border-color:rgba(37,211,102,.4);color:var(--ok)}
 .mini.del{color:var(--danger)}
 .appt.cancel{opacity:.4}.appt.cancel .who{text-decoration:line-through}
-.toggle{position:fixed;right:16px;bottom:16px;z-index:9;display:flex;gap:4px;padding:4px;border-radius:99px;background:#000;border:1px solid var(--border)}
+.toggle{position:fixed;left:16px;bottom:88px;z-index:9;display:flex;gap:4px;padding:4px;border-radius:99px;background:#000;border:1px solid var(--border)}
 .toggle button{padding:8px 12px;border-radius:99px;font-size:13px;font-weight:600}
 .toggle button[aria-pressed=true]{background:var(--gold);color:var(--on-gold)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -105,9 +105,37 @@ input:focus{border-color:var(--gold);outline:0}
 .hero .banner-txt{margin:0;flex:1;min-width:0;font-size:14px;line-height:1.35;color:var(--text)}
 .banner-txt span{display:block;color:var(--muted)}
 .banner-btn{width:auto;flex:none;padding:0 16px}
+/* intro */
+.intro{position:fixed;inset:0;z-index:50;background:var(--bg)}
+.intro .logo{position:fixed;transform-origin:50% 50%;will-change:transform}
+.intro-load{position:fixed;left:50%;top:calc(50% + 70px);width:160px;height:3px;margin-left:-80px;border-radius:2px;background:var(--border);overflow:hidden}
+.intro-load i{display:block;height:100%;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:0 50%}
+.intro-pct{position:fixed;left:0;right:0;top:calc(50% + 84px);text-align:center;font-size:12px;letter-spacing:.3em;color:var(--muted);font-variant-numeric:tabular-nums}
+body.intro-on{overflow:hidden}
+/* whatsapp flotante */
+.wa-float{position:fixed;right:16px;bottom:88px;z-index:20;width:58px;height:58px;border-radius:50%;background:var(--ok);color:#06220f;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.wa-float .ico{width:28px;height:28px}
+.wa-float::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--ok);animation:ping 2.4s ease-out infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.7}70%,100%{transform:scale(1.5);opacity:0}}
+@media(prefers-reduced-motion:reduce){.wa-float::after{animation:none}}
+body[data-v=book] .wa-float,body[data-v=panel] .wa-float{display:none}
+/* pie y privacidad */
+.foot{padding:20px 0 110px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;justify-content:space-between}
+.foot button,.link{color:var(--gold);text-decoration:underline;text-underline-offset:3px;min-height:44px;font-size:inherit}
+.legal h2{font-size:28px;margin:24px 0 8px}.legal p,.legal li{color:var(--muted);margin-bottom:10px}.legal ul{padding-left:20px}
+/* cielo estrellado */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;background:radial-gradient(120% 80% at 80% -10%,#1d1a12 0%,transparent 55%),radial-gradient(90% 60% at -10% 110%,#12121a 0%,transparent 60%),var(--bg)}
+body{background:var(--bg)}
+.view{position:relative;z-index:1}
 </style>
 </head>
-<body>
+<body class="intro-on" data-v="home">
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="intro" id="intro" aria-hidden="true">
+ <div class="logo" id="introLogo"><div class="pole"></div><div><b>DH</b></div><span>Barber<br>Studio</span></div>
+ <div class="intro-load"><i id="introBar"></i></div>
+ <div class="intro-pct" id="introPct">0%</div>
+</div>
 <svg width="0" height="0" style="position:absolute">
  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
@@ -125,7 +153,7 @@ input:focus{border-color:var(--gold);outline:0}
 <!-- ============ CLIENTE: INICIO ============ -->
 <section id="home" class="view on">
  <header class="top"><div class="wrap"><div class="logo"><div class="pole"></div><div><b>DH</b></div><span>Barber<br>Studio</span></div>
-  <a class="mini wa" href="https://wa.me/523329393389" aria-label="WhatsApp"><svg class="ico"><use href="#i-wa"/></svg>WhatsApp</a></div></header>
+</div></header>
  <div class="wrap">
   <div class="hero">
    <h1 class="h"><span class="ln">Tu corte,</span><br><span class="ln gold">sin mensajear.</span></h1>
@@ -145,7 +173,8 @@ input:focus{border-color:var(--gold);outline:0}
    <div class="card"><div class="row"><svg class="ico gold"><use href="#i-pin"/></svg><div><b>Pensador Mexicano</b><div class="muted" style="font-size:14px">Pensador Mexicano #2119</div></div></div></div>
   </div>
   <p class="row muted" style="margin-top:14px;font-size:14px"><svg class="ico"><use href="#i-clock"/></svg>Lunes a sábado · 10:00 a 7:00 pm</p></div>
-  <div class="sec" style="padding-bottom:90px"><h2 class="h">Siempre buscamos<br><span class="gold">mejorar para ustedes</span></h2><p class="muted">Pagas en el local: efectivo o transferencia.</p></div>
+  <div class="sec"><h2 class="h">Siempre buscamos<br><span class="gold">mejorar para ustedes</span></h2><p class="muted">Pagas en el local: efectivo o transferencia.</p></div>
+  <footer class="foot"><span>© 2026 DH Barber Studio · Guadalajara</span><button onclick="show('privacy')">Aviso de privacidad</button></footer>
  </div>
  <div class="sticky-cta wrap"><button class="btn btn-gold" onclick="startBooking()">Agendar cita</button></div>
 </section>
@@ -196,6 +225,31 @@ input:focus{border-color:var(--gold);outline:0}
  </div>
 </section>
 
+<!-- ============ AVISO DE PRIVACIDAD ============ -->
+<section id="privacy" class="view">
+ <header class="top"><div class="wrap"><button class="back" onclick="show(lastView)"><svg class="ico"><use href="#i-left"/></svg>Volver</button><div class="logo"><div class="pole"></div><b>DH</b></div></div></header>
+ <div class="wrap legal" style="padding-bottom:110px">
+  <h1 class="h" style="font-size:48px;margin-top:24px">Aviso de privacidad</h1>
+  <p>Última actualización: septiembre 2026</p>
+  <h2 class="h">Responsable</h2>
+  <p>DH Barber Studio, con domicilio en Federico Medrano #3152, Col. San Rafael, Guadalajara, Jalisco, es responsable del uso y protección de tus datos personales, conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.</p>
+  <h2 class="h">Qué datos recabamos</h2>
+  <ul><li>Nombre.</li><li>Número de WhatsApp.</li><li>Detalles de tu cita: sucursal, servicio, barbero, fecha y hora.</li></ul>
+  <p>No recabamos datos sensibles ni financieros. El pago se hace en el local.</p>
+  <h2 class="h">Para qué los usamos</h2>
+  <ul><li>Agendar, confirmar, recordar o cancelar tu cita.</li><li>Contactarte por WhatsApp sobre esa cita.</li></ul>
+  <p>No vendemos ni compartimos tus datos con terceros para publicidad. Se guardan en los servicios tecnológicos que usamos para operar la agenda (base de datos y calendario).</p>
+  <h2 class="h">Tus derechos ARCO</h2>
+  <p>Puedes pedir acceder, rectificar, cancelar u oponerte al uso de tus datos, o revocar tu consentimiento, escribiendo al WhatsApp <a class="link" href="https://wa.me/523329393389">33 2939 3389</a>. Te responderemos en un máximo de 20 días hábiles.</p>
+  <h2 class="h">Conservación</h2>
+  <p>Conservamos los datos de tus citas hasta 12 meses; después se eliminan.</p>
+  <h2 class="h">Cambios</h2>
+  <p>Cualquier cambio a este aviso se publicará en esta página.</p>
+ </div>
+</section>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/523329393389" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="ico"><use href="#i-wa"/></svg></a>
+
 <div class="toggle" role="group" aria-label="Vista del prototipo"><button aria-pressed="true" onclick="show('home')" id="tC">Cliente</button><button aria-pressed="false" onclick="show('panel')" id="tP">Panel</button></div>
 
 <script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
@@ -208,7 +262,8 @@ const TITLES=['¿A qué sucursal vas?','¿Qué te hacemos?','¿Con quién?','¿C
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-function show(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id===v));
+let lastView='home';
+function show(v){const cur=document.querySelector('.view.on');if(cur&&cur.id!==v&&cur.id!=='privacy')lastView=cur.id;document.body.dataset.v=v;document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id===v));
  $('tC').setAttribute('aria-pressed',v!=='panel');$('tP').setAttribute('aria-pressed',v==='panel');
  if(v==='panel')renderPanel();scrollTo(0,0);FX.view(v)}
 function startBooking(){Object.assign(S,{step:0,br:null,sv:null,ba:null,day:null,time:null});show('book');render()}
@@ -238,7 +293,7 @@ function render(){
  if(S.step===4){h=`<h1 class="h bk-title">${TITLES[4]}</h1>
   <label for="nm">Nombre</label><input id="nm" autocomplete="given-name" value="${esc(S.name)}" oninput="S.name=this.value;upd()" placeholder="Ej. Juan">
   <label for="ph">WhatsApp</label><input id="ph" inputmode="tel" autocomplete="tel-national" value="${esc(S.phone)}" oninput="S.phone=this.value;upd()" placeholder="33 1234 5678">
-  <p class="help">10 dígitos. Solo lo usamos para confirmar tu cita.</p>
+  <p class="help">10 dígitos. Solo lo usamos para confirmar tu cita.</p><p class="help">Al apartar aceptas nuestro <button class="link" style="min-height:auto" onclick="show(&quot;privacy&quot;)">aviso de privacidad</button>.</p>
   <dl class="card sum" style="margin-top:18px">${summary()}</dl>`}
  $('stepBody').innerHTML=h;upd();FX.step()}
 function upd(){$('nextBtn').disabled=!valid();$('nextBtn').textContent=S.step===4?'Apartar cita':'Continuar'}
@@ -300,10 +355,9 @@ const FX=(()=>{
   animate(en.target.querySelectorAll('h2,.price,.card,p'),{opacity:[0,1],y:[24,0],delay:stagger(70),duration:600,ease:'out(3)'})}),{threshold:.15});
  document.querySelectorAll('#home .sec').forEach(s=>{s.querySelectorAll('h2,.price,.card,p').forEach(e=>e.style.opacity=0);io.observe(s)});
  function home(){createTimeline({defaults:{ease:'out(4)',duration:700}})
-  .add('#home .top',{opacity:[0,1],y:[-20,0],duration:500})
-  .add('#home .ln',{opacity:[0,1],y:['110%','0%'],rotate:[-4,0],delay:stagger(120)},'-=250')
+  .add('#home .ln',{opacity:[0,1],y:['110%','0%'],rotate:[-4,0],delay:stagger(120)})
   .add('#home .hero p, #home .hero .btn',{opacity:[0,1],y:[16,0],delay:stagger(90)},'-=450')
-  .add('#home .sticky-cta',{opacity:[0,1],y:[40,0]},'-=400')}
+  .add('#home .sticky-cta, #waFloat',{opacity:[0,1],y:[40,0],delay:stagger(120)},'-=400')}
  function done(){const c=document.querySelector('#done .ok-ic');
   createTimeline({defaults:{ease:'out(3)'}})
   .add(c,{scale:[0,1.15,1],rotate:[-90,0],duration:700,ease:'outElastic(1,.6)'})
@@ -344,7 +398,49 @@ const FX=(()=>{
    animate('#sPend',{scale:[1.25,1],duration:500,ease:'outBack(2)'})}
  };
 })();
-FX.view('home');
+(function sky(){
+ const c=$('sky'),x=c.getContext('2d'),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let W,H,D,stars=[],shoot=null,last=0;
+ function size(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0);
+  const n=Math.round(W*H/2600);stars=[...Array(n)].map(()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.25,
+   a:Math.random()*.6+.2,t:Math.random()*6.28,s:Math.random()*.02+.004,v:Math.random()*.06+.01,gold:Math.random()<.18}))}
+ function frame(ts){const dt=Math.min(ts-last,50)/16.7;last=ts;x.clearRect(0,0,W,H);
+  for(const st of stars){st.t+=st.s*dt;st.y-=st.v*dt;if(st.y<-2){st.y=H+2;st.x=Math.random()*W}
+   const al=st.a*(.55+.45*Math.sin(st.t));x.beginPath();x.arc(st.x,st.y,st.r,0,6.283);
+   x.fillStyle=st.gold?`rgba(212,165,55,${al})`:`rgba(244,241,234,${al})`;x.fill();
+   if(st.r>1.2){x.fillStyle=st.gold?`rgba(212,165,55,${al*.15})`:`rgba(244,241,234,${al*.12})`;x.beginPath();x.arc(st.x,st.y,st.r*3.5,0,6.283);x.fill()}}
+  if(!shoot&&Math.random()<.0025*dt)shoot={x:Math.random()*W*.8+W*.2,y:Math.random()*H*.4,l:0,max:120+Math.random()*80};
+  if(shoot){shoot.l+=9*dt;const p=Math.min(shoot.l,shoot.max),fade=1-shoot.l/(shoot.max*2);
+   const g=x.createLinearGradient(shoot.x-shoot.l,shoot.y+shoot.l*.45,shoot.x-shoot.l+p,shoot.y+shoot.l*.45-p*.45);
+   g.addColorStop(0,'rgba(212,165,55,0)');g.addColorStop(1,`rgba(255,236,190,${Math.max(fade,0)})`);
+   x.strokeStyle=g;x.lineWidth=1.5;x.beginPath();x.moveTo(shoot.x-shoot.l,shoot.y+shoot.l*.45);x.lineTo(shoot.x-shoot.l+p,shoot.y+shoot.l*.45-p*.45);x.stroke();
+   if(fade<=0)shoot=null}
+  if(!RM&&!document.hidden)requestAnimationFrame(frame)}
+ size();addEventListener('resize',()=>{size();if(RM)frame(0)});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!RM){last=performance.now();requestAnimationFrame(frame)}});
+ requestAnimationFrame(t=>{last=t;frame(t)});
+})();
+(function intro(){
+ const el=$('intro'),lg=$('introLogo'),hdr=document.querySelector('#home .top .logo');
+ const end=()=>{el.remove();document.body.classList.remove('intro-on');hdr.style.opacity='';FX.view('home')};
+ const A=window.anime;
+ if(!A||matchMedia('(prefers-reduced-motion: reduce)').matches)return end();
+ const {animate,createTimeline,stagger}=A;
+ const h=hdr.getBoundingClientRect();
+ Object.assign(lg.style,{left:h.left+'px',top:h.top+'px',width:h.width+'px',height:h.height+'px'});
+ const dx=innerWidth/2-(h.left+h.width/2),dy=innerHeight/2-(h.top+h.height/2)-20,S0=2.6;
+ hdr.style.opacity=0;
+ const pct={v:0};
+ const spin=animate(lg.querySelector('.pole'),{backgroundPositionY:['0px','16px'],duration:500,ease:'linear',loop:true});
+ createTimeline({defaults:{ease:'out(3)'}})
+  .add(lg,{x:[dx,dx],y:[dy+30,dy],scale:[S0*.8,S0],opacity:[0,1],duration:700})
+  .add(lg.querySelectorAll('.pole,b,span'),{opacity:[0,1],y:[12,0],delay:stagger(110),duration:500},'-=500')
+  .add('#introBar',{scaleX:[0,1],duration:1400,ease:'inOut(2)'},'-=200')
+  .add(pct,{v:100,duration:1400,ease:'inOut(2)',onUpdate:()=>$('introPct').textContent=Math.round(pct.v)+'%'},'<<')
+  .add('.intro-load, #introPct',{opacity:0,duration:250},'+=120')
+  .add(lg,{x:0,y:0,scale:1,duration:850,ease:'inOut(4)'},'-=100')
+  .add(el,{backgroundColor:['rgba(11,11,12,1)','rgba(11,11,12,0)'],duration:450,ease:'linear',onComplete:()=>{spin.pause();end()}},'-=350');
+})();
 </script>
 </body>
 </html>
