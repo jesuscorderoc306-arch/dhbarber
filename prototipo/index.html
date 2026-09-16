@@ -136,6 +136,24 @@ body[data-v=book] .wa-float,body[data-v=panel] .wa-float{display:none}
 @keyframes drift2{to{transform:translate(14vmax,-10vmax) scale(1.1)}}
 @media(prefers-reduced-motion:reduce){#bg *{animation:none!important}}
 .view{position:relative;z-index:1}
+/* ticket */
+.printer{position:relative;margin:4px auto 0;max-width:330px}
+.printer-slot{position:relative;z-index:2;height:22px;border-radius:12px 12px 6px 6px;background:linear-gradient(#2a2a30,#17171b);border:1px solid var(--border);box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.printer-slot::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:4px;border-radius:2px;background:#050506}
+.printer-led{position:absolute;right:14px;top:5px;width:5px;height:5px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+.ticket-clip{overflow:hidden;margin:-9px 22px 0;padding-bottom:14px}
+.ticket{position:relative;background:#F4F1EA;color:#16161a;font:13px/1.45 "Courier New",ui-monospace,monospace;text-align:left;padding:22px 18px 16px;transform:translateY(-100%);
+ -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from 135deg at top,#000 90deg,#0000 0) bottom/12px 8px repeat-x;
+ mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from 135deg at top,#000 90deg,#0000 0) bottom/12px 8px repeat-x;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+@media(prefers-reduced-motion:reduce){.ticket{transform:none!important}}
+.no-anime .ticket{transform:none}
+.ticket .tc{text-align:center}
+.ticket .tt{font-family:"Bebas Neue",Impact,sans-serif;font-size:30px;letter-spacing:.06em;line-height:1}
+.ticket hr{border:0;border-top:1.5px dashed #16161a55;margin:10px 0}
+.ticket .tr{display:flex;justify-content:space-between;gap:10px}
+.ticket .tr span:last-child{text-align:right;font-weight:700}
+.ticket .tot{font-size:17px;font-weight:700}
+.ticket .bars{height:34px;margin:12px 6px 4px;background:repeating-linear-gradient(90deg,#16161a 0 2px,transparent 2px 4px,#16161a 4px 5px,transparent 5px 8px,#16161a 8px 11px,transparent 11px 12px)}
 </style>
 </head>
 <body class="intro-on" data-v="home">
@@ -203,7 +221,11 @@ body[data-v=book] .wa-float,body[data-v=panel] .wa-float{display:none}
   <div class="ok-ic"><svg class="ico"><use href="#i-check"/></svg></div>
   <h1 class="h" style="font-size:48px">¡Cita apartada!</h1>
   <p class="muted" id="doneName" style="margin:6px 0 20px"></p>
-  <dl class="card sum" id="doneSum" style="text-align:left;margin-bottom:16px"></dl>
+  <div class="printer" aria-label="Ticket de tu cita">
+   <div class="printer-slot"><i class="printer-led"></i></div>
+   <div class="ticket-clip"><div class="ticket" id="ticket"></div></div>
+  </div>
+  <div style="height:8px"></div>
   <a class="btn btn-wa" id="waLink" target="_blank"><svg class="ico"><use href="#i-wa"/></svg>Avisar por WhatsApp</a>
   <p class="help">Recomendado: así la barbería confirma tu cita más rápido.</p>
   <button class="btn btn-line" style="margin-top:12px"><svg class="ico"><use href="#i-cal"/></svg>Agregar a mi calendario</button>
@@ -306,8 +328,19 @@ function render(){
 function upd(){$('nextBtn').disabled=!valid();$('nextBtn').textContent=S.step===4?'Apartar cita':'Continuar'}
 function summary(){const b=BR.find(x=>x.id===S.br),s=SV.find(x=>x.id===S.sv),d=new Date(S.day);
  return `<dt>Servicio</dt><dd>${s.n} · $${s.p}</dd><dt>Barbero</dt><dd>${S.ba==='any'?'El primero disponible':S.ba}</dd><dt>Cuándo</dt><dd>${d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})} · ${fmt(S.time)}</dd><dt>Dónde</dt><dd>${b.n} — ${b.a}</dd>`}
+function ticketHTML(){const b=BR.find(x=>x.id===S.br),s=SV.find(x=>x.id===S.sv),d=new Date(S.day),now=new Date();
+ const folio='DH-'+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(Math.floor(S.time/60)).padStart(2,'0')+String(S.time%60).padStart(2,'0');
+ const row=(k,v)=>`<div class="tr"><span>${k}</span><span>${v}</span></div>`;
+ return `<div class="tc"><div class="tt">DH Barber Studio</div><div>${b.n}</div><div style="font-size:12px">${b.a}</div></div><hr>
+ ${row('Folio',folio)}${row('Emitido',now.toLocaleDateString('es-MX')+' '+now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}))}
+ ${row('Cliente',esc(S.name.trim()))}<hr>
+ ${row('Servicio',s.n)}${row('Duración',s.m+' min')}${row('Barbero',S.ba==='any'?'Primero disp.':S.ba)}
+ ${row('Fecha',d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'}))}${row('Hora',fmt(S.time))}<hr>
+ <div class="tr tot"><span>TOTAL</span><span>$${s.p}.00</span></div>
+ ${row('Pago','En el local')}<div style="font-size:12px;text-align:right">Efectivo o transferencia</div><hr>
+ <div class="tc">¡Gracias por tu preferencia!</div><div class="bars"></div><div class="tc" style="font-size:11px;letter-spacing:.2em">${folio}</div>`}
 function finish(){const b=BR.find(x=>x.id===S.br),s=SV.find(x=>x.id===S.sv),d=new Date(S.day);
- $('doneName').textContent=`${S.name.trim()}, te esperamos.`;$('doneSum').innerHTML=summary()+'<dt>Pago</dt><dd>En el local · efectivo o transferencia</dd>';
+ $('doneName').textContent=`${S.name.trim()}, te esperamos.`;$('ticket').innerHTML=ticketHTML();if(!window.anime)document.body.classList.add('no-anime');
  const msg=`Hola, agendé ${s.n} con ${S.ba==='any'?'el primer barbero disponible':S.ba} el ${d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric'})} a las ${fmt(S.time)} en ${b.n}. A nombre de ${S.name.trim()}.`;
  $('waLink').href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;show('done')}
 
@@ -368,7 +401,12 @@ const FX=(()=>{
   createTimeline({defaults:{ease:'out(3)'}})
   .add(c,{scale:[0,1.15,1],rotate:[-90,0],duration:700,ease:'outElastic(1,.6)'})
   .add('#done h1',{opacity:[0,1],scale:[.8,1],duration:450},'-=350')
-  .add('#done #doneName, #done dl dt, #done dl dd, #done .btn, #done .help',{opacity:[0,1],y:[14,0],delay:stagger(35),duration:420},'-=250')
+  .add('#done #doneName, #done .printer-slot',{opacity:[0,1],y:[14,0],delay:stagger(80),duration:420},'-=250')
+  .add('#done .printer-led',{opacity:{from:.2,to:1},duration:220,loop:4,alternate:true,ease:'linear'},'-=100')
+  // impresión: avanza a tirones como una impresora térmica
+  .add('#ticket',{translateY:[{from:'-100%',to:'-64%',duration:650,ease:'linear'},{to:'-60%',duration:250,ease:'linear'},{to:'-30%',duration:650,ease:'linear'},{to:'-26%',duration:250,ease:'linear'},{to:'0%',duration:600,ease:'out(2)'}]},'<<')
+  .add('#ticket',{rotate:[{from:0,to:-1.2,duration:180},{to:.6,duration:180},{to:0,duration:240}]})
+  .add('#done .btn, #done .help, #done .back',{opacity:[0,1],y:[14,0],delay:stagger(60),duration:420},'-=300')
   .add('#done .btn-wa',{scale:[1,1.04,1],duration:900,ease:'inOut(2)',loop:2},'+=100')}
  return{
   view(v){lastStep=-1;lastStats={};
